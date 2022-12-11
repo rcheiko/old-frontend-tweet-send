@@ -1,6 +1,7 @@
 <template>
     <div>
-        <button type="button" @click="login">Login</button>
+        <button v-if="isAuthenticated" type="button" @click="login">Login</button>
+        <button v-else type="button" @click="login">Login</button>
     </div>
 </template>
 
@@ -10,20 +11,36 @@ definePageMeta({
     description: 'base.meta.home.description'
 });
 
-const requestOptions = {
-    method: "GET",
-    headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-    },
-};
+const props = defineProps({
+    isAuthenticated: Boolean
+})
 
+const emit = defineEmits(['update:isAuthenticated'])
+const route = useRoute();
+
+onBeforeMount(async () => {
+    if (route.query.oauth_token &&
+        route.query.oauth_verifier &&
+        localStorage.hasOwnProperty("oauth")) {
+        const oauth = {
+            "oauth_token": route.query.oauth_token,
+            "oauth_token_secret": localStorage.getItem("oauth"),
+            "oauth_verifier": route.query.oauth_verifier
+        }
+        console.log(oauth);
+        const { data } = await useFetch<auth>("http://localhost:4200/callback-twitter", requestPost(oauth));
+        // await emit('update:isAuthenticated', true);
+        // navigateTo('/');
+
+    }
+})
 
 const login = async () => {
-    const { data: link } = await useFetch<auth>("http://localhost:4200/auth-twitter", requestOptions);
+    const { data: link } = await useFetch<auth>("http://localhost:4200/auth-twitter", requestGet());
     if (!link.value)
         return;
-    console.log(link.value)
-    // navigateTo(link.value.url, { external: true });
+    const oauth = link.value.oauth_token_secret
+    localStorage.setItem('oauth', oauth)
+    navigateTo(link.value.url, { external: true });
 }
 </script>

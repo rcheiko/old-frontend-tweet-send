@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
-    '@nuxtjs/html-validator',
+    // '@nuxtjs/html-validator',
   ],
   tailwindcss: {
     configPath: 'tailwind.config',
