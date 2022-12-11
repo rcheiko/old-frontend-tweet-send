@@ -1,0 +1,11 @@
+{
+  "base": {
+    "title": "Ledgity - {title}",
+    "meta": {
+      "home": {
+        "title": "titre meta",
+        "description": "description meta"
+      }
+    }
+  }
+}
