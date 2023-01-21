@@ -1,0 +1,3 @@
+interface jwt {
+    jwt: string;
+}

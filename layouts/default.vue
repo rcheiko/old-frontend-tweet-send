@@ -7,5 +7,4 @@
 
 <script setup lang="ts">
 const isAuthenticated = ref(false);
-
 </script>
